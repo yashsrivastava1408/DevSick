@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
 import { getIncidents, getStats, simulateScenario, resetSimulation } from '../api/client';
+import { Activity, AlertTriangle, CheckCircle, Rocket, RefreshCw, Trash2, Search } from '../components/Icons';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -71,8 +72,13 @@ function Dashboard() {
     return (
         <div className="dashboard fade-in">
             <div className="dashboard-header">
-                <h1>Incident Dashboard</h1>
-                <p>AI-powered incident detection, correlation, and root cause analysis</p>
+                <div>
+                    <h1>Incident Dashboard</h1>
+                    <p>AI-powered incident detection, correlation, and root cause analysis</p>
+                </div>
+                <div className="header-actions">
+                    {/* Placeholder for header actions if needed */}
+                </div>
             </div>
 
             {/* Stats Bar */}
@@ -113,21 +119,21 @@ function Dashboard() {
                     {simulating ? (
                         <><div className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }}></div> Running Pipeline...</>
                     ) : (
-                        <>🚀 Simulate Incidents</>
+                        <><Rocket size={16} /> Simulate Incidents</>
                     )}
                 </button>
                 <button
                     className="btn btn-secondary"
                     onClick={fetchData}
                 >
-                    🔄 Refresh
+                    <RefreshCw size={16} /> Refresh
                 </button>
                 {incidents.length > 0 && (
                     <button
                         className="btn btn-danger"
                         onClick={handleReset}
                     >
-                        🗑️ Reset All
+                        <Trash2 size={16} /> Reset All
                     </button>
                 )}
             </div>
@@ -141,7 +147,7 @@ function Dashboard() {
 
                 {incidents.length === 0 ? (
                     <div className="empty-state">
-                        <div className="empty-icon">🔍</div>
+                        <div className="empty-icon"><Search size={48} strokeWidth={1} /></div>
                         <h3>No incidents detected</h3>
                         <p>Click "Simulate Incidents" to run demo scenarios through the AI reasoning pipeline.</p>
                     </div>

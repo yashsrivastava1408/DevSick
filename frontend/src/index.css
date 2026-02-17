@@ -1,55 +1,55 @@
 /* ========================================
    DEVSICK — Design System
-   Enterprise Dark Theme
+   "Insane" Level — Elite Enterprise Dark
    ======================================== */
 
 :root {
-  /* Core palette */
-  --bg-primary: #0a0e17;
-  --bg-secondary: #111827;
-  --bg-card: #1a2035;
-  --bg-card-hover: #1f2847;
-  --bg-elevated: #242f4a;
-  --bg-input: #0d1220;
+  /* TRUE Deep Blacks (layered depth) */
+  --bg-primary: #000000;
+  --bg-secondary: #050505;
+  --bg-tertiary: #0a0a0a;
 
-  /* Border colors */
-  --border-primary: #1e2d4a;
-  --border-secondary: #2a3a5c;
-  --border-accent: #3b4d71;
+  /* Glass — Premium Frosted */
+  --glass-card: rgba(18, 18, 18, 0.6);
+  --glass-card-hover: rgba(28, 28, 28, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Slightly brighter for edge popping */
+  --glass-edge: rgba(255, 255, 255, 0.15);
+  --glass-shine: rgba(255, 255, 255, 0.05);
 
-  /* Text colors */
-  --text-primary: #e8ecf4;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-accent: #60a5fa;
+  /* Elevated surfaces */
+  --bg-input: rgba(22, 22, 22, 0.8);
+  --bg-elevated: rgba(35, 35, 35, 0.9);
 
-  /* Severity colors */
+  /* Typography hierarchy */
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #606060;
+  --text-soft: #8a8a8a;
+
+  /* Monochrome accents */
+  --accent-primary: #1f1f1f;
+  --accent-secondary: #333333;
+  --accent-glow: rgba(255, 255, 255, 0.15);
+
+  /* Severity colors (Desaturated/Muted) */
   --severity-critical: #ef4444;
-  --severity-critical-bg: rgba(239, 68, 68, 0.12);
+  --severity-critical-bg: rgba(239, 68, 68, 0.1);
   --severity-high: #f97316;
-  --severity-high-bg: rgba(249, 115, 22, 0.12);
+  --severity-high-bg: rgba(249, 115, 22, 0.1);
   --severity-medium: #eab308;
-  --severity-medium-bg: rgba(234, 179, 8, 0.12);
+  --severity-medium-bg: rgba(234, 179, 8, 0.1);
   --severity-low: #3b82f6;
-  --severity-low-bg: rgba(59, 130, 246, 0.12);
+  --severity-low-bg: rgba(59, 130, 246, 0.1);
 
   /* Status colors */
-  --status-detected: #8b5cf6;
-  --status-analyzing: #f59e0b;
   --status-analyzed: #10b981;
-  --status-actions-pending: #f97316;
-  --status-resolved: #06b6d4;
+  --status-pending: #f59e0b;
 
-  /* Approval colors */
-  --approval-pending: #f59e0b;
-  --approval-approved: #10b981;
-  --approval-rejected: #ef4444;
-  --approval-rollback: #8b5cf6;
-
-  /* Accent */
-  --accent-primary: #6366f1;
-  --accent-secondary: #818cf8;
-  --accent-glow: rgba(99, 102, 241, 0.25);
+  /* Advanced shadows */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.8);
+  --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.05);
 
   /* Fonts */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -57,17 +57,14 @@
 
   /* Spacing */
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-
-  /* Shadows */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px var(--accent-glow);
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
 /* Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -75,58 +72,154 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  /* ULTRA COOL Ambient Background */
+  background-color: #000000;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
+  animation: bgBreath 20s ease-in-out infinite alternate;
+}
+
+@keyframes bgBreath {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 10% 10%;
+  }
+}
+
+/* Scanlines Overlay */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.1));
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
 }
 
 #root {
   min-height: 100vh;
+  display: flex;
 }
 
-/* Scrollbar */
+/* Premium Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--border-secondary);
+  background: linear-gradient(to bottom, #1a1a1a, #333333);
   border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-accent);
+
+/* Premium Glass Panel with Cursor Spotlight */
+.glass-panel {
+  background: var(--glass-card);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass), var(--shadow-inner);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Animations */
+/* Spotlight Effect via Radial Gradient tracking mouse */
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-panel:hover::after {
+  opacity: 1;
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.03),
+      /* Subtle shine */
+      transparent);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Cyber Enterprise Hover Effect */
+.glass-panel:hover {
+  transform: translateY(-2px);
+  background: var(--glass-card-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(255, 255, 255, 0.03);
+  /* Glow */
+}
+
+/* Edge Lighting Animation (Optional, could be too distracting, simplified here) */
+
+/* Micro Interactions */
+button,
+a,
+.interactive {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* Reduced Motion Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(-12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 .fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.slide-in {
-  animation: slideIn 0.3s ease-out;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Smooth 'Apple' feel easing */
 }

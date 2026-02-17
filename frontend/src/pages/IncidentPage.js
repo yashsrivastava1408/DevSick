@@ -7,16 +7,31 @@ import {
     approveAction,
     rejectAction,
 } from '../api/client';
+import {
+    Key,
+    Database,
+    Network,
+    ShieldCheck,
+    ShieldAlert,
+    Zap,
+    Server,
+    AlertTriangle,
+    CheckCircle,
+    Activity
+} from '../components/Icons';
 import './IncidentPage.css';
 
-const SERVICE_ICONS = {
-    vault: '🔐',
-    eso: '🔑',
-    database: '🗄️',
-    api_gateway: '🌐',
-    auth_service: '🛡️',
-    user_service: '👤',
-    cert_manager: '📜',
+const getServiceIcon = (serviceName) => {
+    switch (serviceName) {
+        case 'vault': return <Key size={16} />;
+        case 'eso': return <Key size={16} />;
+        case 'database': return <Database size={16} />;
+        case 'api_gateway': return <Network size={16} />;
+        case 'auth_service': return <ShieldCheck size={16} />;
+        case 'user_service': return <ShieldAlert size={16} />;
+        case 'cert_manager': return <ShieldCheck size={16} />;
+        default: return <Server size={16} />;
+    }
 };
 
 function IncidentPage() {
@@ -87,7 +102,7 @@ function IncidentPage() {
             <div className="incident-page">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
                 <div className="empty-state">
-                    <div className="empty-icon">❌</div>
+                    <div className="empty-icon"><AlertTriangle size={48} strokeWidth={1} /></div>
                     <h3>Incident not found</h3>
                 </div>
             </div>
@@ -122,7 +137,7 @@ function IncidentPage() {
             {rca && (
                 <div className="section">
                     <div className="section-header">
-                        <h2>🧠 AI Root Cause Analysis</h2>
+                        <h2><Zap size={18} /> AI Root Cause Analysis</h2>
                         <StatusBadge type="status" value="analyzed" />
                     </div>
                     <div className="section-content">
@@ -175,7 +190,7 @@ function IncidentPage() {
             {/* Event Timeline */}
             <div className="section">
                 <div className="section-header">
-                    <h2>📋 Event Timeline</h2>
+                    <h2><Activity size={18} /> Event Timeline</h2>
                     <span className="table-count">{incident.timeline?.length || 0} events</span>
                 </div>
                 <div className="section-content">
@@ -196,7 +211,7 @@ function IncidentPage() {
             {actions.length > 0 && (
                 <div className="section">
                     <div className="section-header">
-                        <h2>🔧 Recommended Actions</h2>
+                        <h2><CheckCircle size={18} /> Recommended Actions</h2>
                         <span className="table-count">
                             {actions.filter(a => a.approval_status === 'pending').length} pending
                         </span>
@@ -220,7 +235,7 @@ function IncidentPage() {
                                     )}
                                     {action.rollback_description && (
                                         <div className="action-rollback">
-                                            ↩️ Rollback: {action.rollback_description}
+                                            Rollback: {action.rollback_description}
                                         </div>
                                     )}
                                     {action.approval_status === 'pending' && (
@@ -229,13 +244,13 @@ function IncidentPage() {
                                                 className="btn btn-sm btn-approve"
                                                 onClick={() => handleApprove(action.id)}
                                             >
-                                                ✓ Approve
+                                                Approve
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-reject"
                                                 onClick={() => handleReject(action.id)}
                                             >
-                                                ✕ Reject
+                                                Reject
                                             </button>
                                         </div>
                                     )}
@@ -249,14 +264,14 @@ function IncidentPage() {
             {/* Affected Services */}
             <div className="section">
                 <div className="section-header">
-                    <h2>🔗 Affected Services</h2>
+                    <h2><Network size={18} /> Affected Services</h2>
                 </div>
                 <div className="section-content">
                     <div className="services-grid">
                         {incident.affected_services?.map((svc) => (
                             <div key={svc} className="service-chip">
                                 <span className="service-chip-icon">
-                                    {SERVICE_ICONS[svc] || '📦'}
+                                    {getServiceIcon(svc)}
                                 </span>
                                 {svc}
                             </div>
