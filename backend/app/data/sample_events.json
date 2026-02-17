@@ -1,0 +1,198 @@
+{
+    "scenarios": {
+        "vault_auth_failure": {
+            "name": "Vault Authentication Failure",
+            "description": "ESO cannot authenticate with Vault, cascading to downstream services",
+            "events": [
+                {
+                    "source_service": "vault",
+                    "severity": "critical",
+                    "message": "Authentication endpoint returning 503 - Vault sealed or unreachable",
+                    "metadata": {
+                        "endpoint": "/v1/auth/kubernetes/login",
+                        "status_code": 503,
+                        "pod": "vault-0"
+                    },
+                    "timestamp_offset_seconds": 0
+                },
+                {
+                    "source_service": "eso",
+                    "severity": "critical",
+                    "message": "Failed to authenticate with Vault backend: connection refused",
+                    "metadata": {
+                        "secret_store": "vault-backend",
+                        "error": "EHOSTUNREACH",
+                        "retry_count": 3
+                    },
+                    "timestamp_offset_seconds": 5
+                },
+                {
+                    "source_service": "eso",
+                    "severity": "high",
+                    "message": "SecretStore vault-backend status changed to Error",
+                    "metadata": {
+                        "secret_store": "vault-backend",
+                        "previous_status": "Ready",
+                        "new_status": "Error"
+                    },
+                    "timestamp_offset_seconds": 8
+                },
+                {
+                    "source_service": "database",
+                    "severity": "high",
+                    "message": "Unable to rotate database credentials - ExternalSecret sync failed",
+                    "metadata": {
+                        "external_secret": "db-credentials",
+                        "sync_status": "SecretSyncedError"
+                    },
+                    "timestamp_offset_seconds": 15
+                },
+                {
+                    "source_service": "auth_service",
+                    "severity": "high",
+                    "message": "Database connection pool exhausted - credentials expired",
+                    "metadata": {
+                        "pool_size": 20,
+                        "active": 0,
+                        "waiting": 47,
+                        "error": "FATAL: password authentication failed"
+                    },
+                    "timestamp_offset_seconds": 30
+                },
+                {
+                    "source_service": "api_gateway",
+                    "severity": "critical",
+                    "message": "Health check failing for auth-service upstream - 502 Bad Gateway",
+                    "metadata": {
+                        "upstream": "auth-service:8080",
+                        "health_check_failures": 5,
+                        "circuit_breaker": "open"
+                    },
+                    "timestamp_offset_seconds": 45
+                }
+            ]
+        },
+        "database_jwt_missing": {
+            "name": "Database JWT Token Missing",
+            "description": "JWT signing key rotation failure causes authentication cascade",
+            "events": [
+                {
+                    "source_service": "vault",
+                    "severity": "medium",
+                    "message": "JWT signing key lease expired - automatic renewal failed",
+                    "metadata": {
+                        "lease_id": "auth/jwt/keys/signing-key",
+                        "ttl_remaining": 0,
+                        "error": "lease not found"
+                    },
+                    "timestamp_offset_seconds": 0
+                },
+                {
+                    "source_service": "auth_service",
+                    "severity": "critical",
+                    "message": "JWT verification failed - signing key missing from keystore",
+                    "metadata": {
+                        "key_id": "vault-jwt-2024-02",
+                        "keystore_keys": 0,
+                        "error": "NO_SIGNING_KEY"
+                    },
+                    "timestamp_offset_seconds": 10
+                },
+                {
+                    "source_service": "auth_service",
+                    "severity": "high",
+                    "message": "Token validation rejecting all requests - 401 Unauthorized spike",
+                    "metadata": {
+                        "rejected_requests_per_sec": 342,
+                        "error_rate": "99.8%",
+                        "endpoint": "/validate"
+                    },
+                    "timestamp_offset_seconds": 15
+                },
+                {
+                    "source_service": "user_service",
+                    "severity": "high",
+                    "message": "All authenticated API calls failing - upstream auth-service returning 401",
+                    "metadata": {
+                        "failed_requests": 1247,
+                        "affected_users": 89,
+                        "error": "UNAUTHENTICATED"
+                    },
+                    "timestamp_offset_seconds": 20
+                },
+                {
+                    "source_service": "api_gateway",
+                    "severity": "critical",
+                    "message": "Error rate exceeded SLA threshold - 99% of requests returning 5xx",
+                    "metadata": {
+                        "error_rate": "99.1%",
+                        "sla_threshold": "0.1%",
+                        "alert": "P1_SLA_BREACH"
+                    },
+                    "timestamp_offset_seconds": 25
+                }
+            ]
+        },
+        "api_auth_cascade": {
+            "name": "API Authentication Cascade Failure",
+            "description": "TLS certificate expiry triggers cascading authentication failures",
+            "events": [
+                {
+                    "source_service": "cert_manager",
+                    "severity": "high",
+                    "message": "TLS certificate for api-gateway.prod expiring in 0 hours - renewal failed",
+                    "metadata": {
+                        "certificate": "api-gateway-tls",
+                        "expiry": "2024-02-17T00:00:00Z",
+                        "error": "ACME challenge failed"
+                    },
+                    "timestamp_offset_seconds": 0
+                },
+                {
+                    "source_service": "api_gateway",
+                    "severity": "critical",
+                    "message": "TLS handshake failures spiking - certificate expired",
+                    "metadata": {
+                        "tls_errors_per_sec": 523,
+                        "certificate": "api-gateway-tls",
+                        "error": "CERTIFICATE_EXPIRED"
+                    },
+                    "timestamp_offset_seconds": 10
+                },
+                {
+                    "source_service": "api_gateway",
+                    "severity": "critical",
+                    "message": "Client connections being rejected - SSL_ERROR_EXPIRED_CERT_ALERT",
+                    "metadata": {
+                        "rejected_connections": 2341,
+                        "affected_clients": 156,
+                        "protocol": "TLS 1.3"
+                    },
+                    "timestamp_offset_seconds": 15
+                },
+                {
+                    "source_service": "auth_service",
+                    "severity": "high",
+                    "message": "OAuth callback endpoint unreachable via gateway - mTLS validation failing",
+                    "metadata": {
+                        "endpoint": "/oauth/callback",
+                        "error": "PEER_CERT_INVALID",
+                        "upstream": "api-gateway"
+                    },
+                    "timestamp_offset_seconds": 20
+                },
+                {
+                    "source_service": "user_service",
+                    "severity": "medium",
+                    "message": "Intermittent timeouts on user profile requests - gateway circuit breaker open",
+                    "metadata": {
+                        "timeout_rate": "67%",
+                        "circuit_breaker_state": "half-open",
+                        "fallback": "cache"
+                    },
+                    "timestamp_offset_seconds": 30
+                }
+            ]
+        }
+    }
+}

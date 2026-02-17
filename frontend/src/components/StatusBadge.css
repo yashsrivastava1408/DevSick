@@ -1,0 +1,101 @@
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Severity badges */
+.status-badge.severity-critical {
+    background: var(--severity-critical-bg);
+    color: var(--severity-critical);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.status-badge.severity-high {
+    background: var(--severity-high-bg);
+    color: var(--severity-high);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.status-badge.severity-medium {
+    background: var(--severity-medium-bg);
+    color: var(--severity-medium);
+    border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.status-badge.severity-low {
+    background: var(--severity-low-bg);
+    color: var(--severity-low);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+/* Status badges */
+.status-badge.status-detected {
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--status-detected);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.status-badge.status-analyzing {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--status-analyzing);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.status-badge.status-analyzed {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--status-analyzed);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-badge.status-actions_pending {
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--status-actions-pending);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.status-badge.status-resolved {
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--status-resolved);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+/* Approval badges */
+.status-badge.approval-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--approval-pending);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-badge.approval-approved {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--approval-approved);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-badge.approval-rejected {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--approval-rejected);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.status-badge.approval-rolled_back {
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--approval-rollback);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}

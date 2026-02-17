@@ -1,0 +1,57 @@
+{
+  "services": [
+    {
+      "id": "vault",
+      "name": "HashiCorp Vault",
+      "type": "secrets_management",
+      "tier": "infrastructure"
+    },
+    {
+      "id": "eso",
+      "name": "External Secrets Operator",
+      "type": "secrets_sync",
+      "tier": "infrastructure"
+    },
+    {
+      "id": "database",
+      "name": "PostgreSQL Database",
+      "type": "database",
+      "tier": "data"
+    },
+    {
+      "id": "api_gateway",
+      "name": "API Gateway",
+      "type": "gateway",
+      "tier": "application"
+    },
+    {
+      "id": "auth_service",
+      "name": "Authentication Service",
+      "type": "service",
+      "tier": "application"
+    },
+    {
+      "id": "user_service",
+      "name": "User Service",
+      "type": "service",
+      "tier": "application"
+    },
+    {
+      "id": "cert_manager",
+      "name": "Cert Manager",
+      "type": "certificate_management",
+      "tier": "infrastructure"
+    }
+  ],
+  "dependencies": [
+    { "from": "eso", "to": "vault", "relation": "authenticates_with" },
+    { "from": "database", "to": "eso", "relation": "reads_secrets_from" },
+    { "from": "api_gateway", "to": "auth_service", "relation": "delegates_auth_to" },
+    { "from": "auth_service", "to": "database", "relation": "queries" },
+    { "from": "auth_service", "to": "vault", "relation": "reads_jwt_keys_from" },
+    { "from": "user_service", "to": "database", "relation": "queries" },
+    { "from": "user_service", "to": "auth_service", "relation": "validates_tokens_with" },
+    { "from": "api_gateway", "to": "cert_manager", "relation": "uses_tls_from" },
+    { "from": "cert_manager", "to": "vault", "relation": "stores_certs_in" }
+  ]
+}
