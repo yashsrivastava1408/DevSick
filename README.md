@@ -14,6 +14,10 @@
     <img src="https://img.shields.io/badge/Groq_AI-Llama_3.1-FF6B35?style=for-the-badge&logo=meta&logoColor=white" alt="Groq" />
     <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
   </p>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Status-Prototype_MVP-blueviolet?style=for-the-badge" alt="Status" />
+    <img src="https://img.shields.io/badge/Maintenance-Active_Development-yellow?style=for-the-badge" alt="Maintenance" />
+  </p>
 </p>
 
 ---
@@ -24,42 +28,58 @@
 
 ## 🏗️ Architecture
 
-```
- Observability Sources (Simulated)
-         │
-         ▼
- ┌───────────────────────┐
- │  Log & Event Ingestion │  POST /api/ingest
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  Event Correlation     │  Time-window + dependency-aware
- │  Engine                │  Scenario pattern matching
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  Service Dependency    │  Directed graph: 7 services
- │  Knowledge Graph       │  9 dependency edges
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  AI Incident Reasoning │  Groq API + Llama 3.1 8B
- │  (Structured Prompts)  │  JSON output schema
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  Root Cause Analysis   │  Reasoning chain + confidence
- │  + Recommendations     │  Remediation playbooks
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  Human-in-the-Loop     │  Approve / Reject / Rollback
- │  Governance            │  Audit trail
- └──────────┬────────────┘
-            ▼
- ┌───────────────────────┐
- │  Dashboard Interface   │  Dark-themed enterprise UI
- └───────────────────────┘
+```mermaid
+graph TD
+    subgraph Observability [Observability Layer]
+        Logs[📝 Logs / Events]
+        Metrics[Eq Metrics]
+        Alerts[🔔 Alerts]
+    end
+
+    subgraph Ingestion [Ingestion Layer]
+        API[📥 Log & Event Ingestion API]
+    end
+
+    subgraph Intelligence [Intelligence Layer]
+        Correlation[⚙️ Event Correlation Engine]
+        Graph[🕸️ Service Knowledge Graph]
+        AI[🧠 AI Incident Reasoning<br/>(Groq + Llama 3.1)]
+    end
+
+    subgraph Action [Action Layer]
+        RCA[🔍 Root Cause Analysis]
+        Recs[🔧 Recommendation Engine]
+    end
+
+    subgraph Governance [Governance Layer]
+        Human[👤 Human-in-the-Loop<br/>Governance]
+    end
+
+    subgraph UI [Presentation Layer]
+        Dash[📊 React Dashboard]
+    end
+
+    Logs --> API
+    Metrics --> API
+    Alerts --> API
+    
+    API --> Correlation
+    Correlation <--> Graph
+    Correlation --> AI
+    Graph --> AI
+    
+    AI --> RCA
+    AI --> Recs
+    
+    RCA --> Human
+    Recs --> Human
+    
+    Human --> Dash
+    
+    classDef layer fill:#0f172a,stroke:#334155,color:#fff,stroke-width:2px;
+    classDef component fill:#1e293b,stroke:#475569,color:#e2e8f0;
+    class Observability,Ingestion,Intelligence,Action,Governance,UI layer;
+    class Logs,Metrics,Alerts,API,Correlation,Graph,AI,RCA,Recs,Human,Dash component;
 ```
 
 ---
