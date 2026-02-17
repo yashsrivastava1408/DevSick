@@ -31,32 +31,32 @@
 ```mermaid
 graph TD
     subgraph Observability [Observability Layer]
-        Logs[📝 Logs / Events]
-        Metrics[Eq Metrics]
-        Alerts[🔔 Alerts]
+        Logs[Logs / Events]
+        Metrics[Metrics]
+        Alerts[Alerts]
     end
 
     subgraph Ingestion [Ingestion Layer]
-        API[📥 Log & Event Ingestion API]
+        API[Log & Event Ingestion API]
     end
 
     subgraph Intelligence [Intelligence Layer]
-        Correlation[⚙️ Event Correlation Engine]
-        Graph[🕸️ Service Knowledge Graph]
-        AI[🧠 AI Incident Reasoning<br/>(Groq + Llama 3.1)]
+        Correlation[Event Correlation Engine]
+        Graph[Service Knowledge Graph]
+        AI[AI Incident Reasoning<br/>Groq + Llama 3.1]
     end
 
     subgraph Action [Action Layer]
-        RCA[🔍 Root Cause Analysis]
-        Recs[🔧 Recommendation Engine]
+        RCA[Root Cause Analysis]
+        Recs[Recommendation Engine]
     end
 
     subgraph Governance [Governance Layer]
-        Human[👤 Human-in-the-Loop<br/>Governance]
+        Human[Human-in-the-Loop<br/>Governance]
     end
 
     subgraph UI [Presentation Layer]
-        Dash[📊 React Dashboard]
+        Dash[React Dashboard]
     end
 
     Logs --> API
