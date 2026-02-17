@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🛡️ Devsick</h1>
+  <h1 align="center">Devsick</h1>
   <p align="center">
     <strong>AI-Driven Application Support & Operations Platform</strong>
   </p>
@@ -22,11 +22,11 @@
 
 ---
 
-> **⚠️ This is NOT a chatbot.** Devsick is a structured incident reasoning pipeline — it ingests logs, correlates events, maps service dependencies, and uses AI to generate root cause analysis with actionable remediation playbooks.
+> **Note: This is NOT a chatbot.** Devsick is a structured incident reasoning pipeline — it ingests logs, correlates events, maps service dependencies, and uses AI to generate root cause analysis with actionable remediation playbooks.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph TD
@@ -84,21 +84,21 @@ graph TD
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔍 **Event Correlation** | Groups related errors across services using time windows and dependency mapping |
-| 🧠 **AI Root Cause Analysis** | Llama 3.1 via Groq API generates structured RCA with reasoning chains |
-| 📊 **Confidence Scoring** | Each analysis includes a confidence score (0–100%) |
-| 🔧 **Remediation Playbooks** | Pre-built action plans with `kubectl` commands and rollback procedures |
-| 👤 **Human Governance** | Approve/reject workflow — AI never auto-executes on production |
-| 🗺️ **Dependency Mapping** | Knowledge graph tracks service relationships and cascade paths |
-| ⚡ **Graceful Degradation** | Falls back to mock RCA when Groq API is unavailable |
+| **Event Correlation** | Groups related errors across services using time windows and dependency mapping |
+| **AI Root Cause Analysis** | Llama 3.1 via Groq API generates structured RCA with reasoning chains |
+| **Confidence Scoring** | Each analysis includes a confidence score (0–100%) |
+| **Remediation Playbooks** | Pre-built action plans with `kubectl` commands and rollback procedures |
+| **Human Governance** | Approve/reject workflow — AI never auto-executes on production |
+| **Dependency Mapping** | Knowledge graph tracks service relationships and cascade paths |
+| **Graceful Degradation** | Falls back to mock RCA when Groq API is unavailable |
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -146,10 +146,10 @@ npm start
 
 ---
 
-## 🎮 Demo Walkthrough
+## Demo Walkthrough
 
 1. Open `http://localhost:3000`
-2. Click **🚀 Simulate Incidents** — runs 3 enterprise scenarios
+2. Click **Simulate Incidents** — runs 3 enterprise scenarios
 3. Click any incident to see AI reasoning, timeline, and recommendations
 4. Use **Approve / Reject** to exercise the governance workflow
 
@@ -163,7 +163,7 @@ npm start
 
 ---
 
-## 📡 API Reference
+## API Reference
 
 ### Core Endpoints
 
@@ -202,7 +202,7 @@ npm start
 
 ---
 
-## 🧱 Project Structure
+## Project Structure
 
 ```
 Devsick/
@@ -245,7 +245,7 @@ Devsick/
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -254,7 +254,7 @@ Devsick/
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
@@ -267,7 +267,7 @@ Devsick/
 
 ---
 
-## 🧠 How the AI Works
+## How the AI Works
 
 Devsick uses **structured prompting** — not chat. The AI receives:
 
@@ -279,12 +279,12 @@ The prompt engineering ensures consistent, auditable RCA output rather than free
 
 ---
 
-## 📄 License
+## License
 
 This project is built as an enterprise prototype for demonstration purposes.
 
 ---
 
 <p align="center">
-  <strong>Built with ⚡ by Yash Srivastava</strong>
+  <strong>Built by Yash Srivastava</strong>
 </p>
