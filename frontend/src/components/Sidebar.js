@@ -25,12 +25,8 @@ function Sidebar() {
         <nav className="sidebar">
             <div className="sidebar-header">
                 <Link to="/" className="sidebar-logo">
-                    <div className="logo-icon">
-                        <Activity size={20} />
-                    </div>
-                    <div className="logo-text">
-                        <h1>Devsick</h1>
-                        <span>Incident Intelligence</span>
+                    <div className="sidebar-logo-container">
+                        <img src="/logo.png" alt="Devsick" className="sidebar-logo-img" />
                     </div>
                 </Link>
             </div>

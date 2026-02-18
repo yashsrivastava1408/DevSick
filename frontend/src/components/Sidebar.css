@@ -1,43 +1,41 @@
 .sidebar {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 20px;
+    top: 20px;
     width: 260px;
-    height: 100vh;
-    background: var(--glass-card);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border-right: 1px solid var(--glass-border);
+    height: calc(100vh - 40px);
+    background: rgba(10, 10, 12, 0.6);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     z-index: 100;
     overflow: hidden;
-    /* For spotlight */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Spotlight Effect */
-.sidebar::after {
-    content: "";
+.sidebar:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* Iridescent Shine */
+.sidebar::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
-            rgba(255, 255, 255, 0.04),
-            transparent 40%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.sidebar:hover::after {
-    opacity: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
 .sidebar-header {
-    padding: 32px 24px;
+    padding: 32px 24px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .sidebar-logo {
@@ -48,102 +46,110 @@
     color: var(--text-primary);
 }
 
-.logo-icon {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    border-radius: 8px;
+.sidebar-logo-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: white;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    justify-content: flex-start;
+    width: 100%;
 }
 
-.logo-text h1 {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--text-primary);
+.sidebar-logo-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    /* Clean contrast for Prism look */
+    filter: contrast(1.1) brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.logo-text span {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 500;
-    display: block;
-    margin-top: 2px;
+.sidebar-logo:hover .sidebar-logo-img {
+    transform: scale(1.02);
+    filter: contrast(1.2) brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
 }
 
 .sidebar-nav {
-    padding: 0 16px;
+    padding: 16px;
     flex: 1;
+    overflow-y: auto;
 }
 
 .nav-section-label {
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 2px;
     color: var(--text-muted);
     padding: 24px 12px 12px;
     opacity: 0.6;
+    font-family: var(--font-sans);
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px;
-    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    border-radius: 12px;
     color: var(--text-secondary);
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
     border: 1px solid transparent;
     margin-bottom: 4px;
+    position: relative;
+    overflow: hidden;
 }
 
 .nav-item:hover {
     color: var(--text-primary);
-    background: var(--glass-shine);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .nav-item.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--accent-secondary);
-    border-color: rgba(99, 102, 241, 0.1);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient text for active item */
+.nav-item.active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent);
+    border-left: 2px solid #fff;
 }
 
 .nav-icon {
-    font-size: 16px;
-    opacity: 0.8;
+    font-size: 18px;
+    opacity: 0.6;
+    transition: all 0.3s;
 }
 
+.nav-item:hover .nav-icon,
 .nav-item.active .nav-icon {
     opacity: 1;
+    transform: scale(1.1);
 }
 
 .sidebar-footer {
     padding: 24px;
     background: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid var(--glass-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .system-status {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
     font-weight: 500;
+    font-family: var(--font-sans);
+    letter-spacing: 0.5px;
 }
 
 .status-dot {
@@ -151,31 +157,37 @@
     height: 6px;
     border-radius: 50%;
     background: var(--status-analyzed);
-    box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+    box-shadow: 0 0 10px var(--status-analyzed);
     position: relative;
+    flex-shrink: 0;
 }
 
 .status-dot::after {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
     border-radius: 50%;
-    border: 1px solid rgba(52, 211, 153, 0.3);
-    animation: pulse-ring 2s infinite;
+    border: 1px solid var(--status-analyzed);
+    opacity: 0.4;
+    animation: pulse-ring 3s infinite;
 }
 
 .status-dot.offline {
     background: var(--severity-critical);
-    box-shadow: 0 0 8px rgba(248, 113, 113, 0.4);
+    box-shadow: 0 0 10px var(--severity-critical);
+}
+
+.status-dot.offline::after {
+    border-color: var(--severity-critical);
 }
 
 @keyframes pulse-ring {
     0% {
-        transform: scale(1);
-        opacity: 1;
+        transform: scale(0.8);
+        opacity: 0.5;
     }
 
     100% {

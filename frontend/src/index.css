@@ -1,64 +1,77 @@
 /* ========================================
    DEVSICK — Design System
-   "Insane" Level — Elite Enterprise Dark
+   "Holographic Prism" — Liquid Dark
    ======================================== */
 
-:root {
-  /* TRUE Deep Blacks (layered depth) */
-  --bg-primary: #000000;
-  --bg-secondary: #050505;
-  --bg-tertiary: #0a0a0a;
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  /* Glass — Premium Frosted */
-  --glass-card: rgba(18, 18, 18, 0.6);
-  --glass-card-hover: rgba(28, 28, 28, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  /* Slightly brighter for edge popping */
-  --glass-edge: rgba(255, 255, 255, 0.15);
-  --glass-shine: rgba(255, 255, 255, 0.05);
+:root {
+  /* VOID Blacks (Noise Textured) */
+  --bg-primary: #050507;
+  --bg-secondary: #0a0a0f;
+  --bg-tertiary: #101015;
+
+  /* Glass — Crystalline */
+  --glass-card: rgba(255, 255, 255, 0.03);
+  --glass-card-hover: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-edge: rgba(255, 255, 255, 0.2);
+  --glass-shine: rgba(255, 255, 255, 0.08);
 
   /* Elevated surfaces */
-  --bg-input: rgba(22, 22, 22, 0.8);
-  --bg-elevated: rgba(35, 35, 35, 0.9);
+  --bg-input: rgba(20, 20, 25, 0.7);
+  --bg-elevated: rgba(30, 30, 35, 0.8);
 
-  /* Typography hierarchy */
+  /* Typography */
   --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --text-muted: #606060;
-  --text-soft: #8a8a8a;
+  --text-secondary: #a0a0a0;
+  --text-muted: #555555;
+  --text-soft: #777777;
 
-  /* Monochrome accents */
-  --accent-primary: #1f1f1f;
-  --accent-secondary: #333333;
-  --accent-glow: rgba(255, 255, 255, 0.15);
+  /* HOLOGRAPHIC Accents */
+  /* Replaces neon with "Oil Slick" gradients */
+  --accent-cyan: #00f3ff;
+  --accent-purple: #bc13fe;
+  --accent-pink: #ff0055;
+  --gradient-holo: linear-gradient(135deg, #00f3ff, #bc13fe, #ff0055);
+  --gradient-holo-text: linear-gradient(to right, #ffffff 20%, #00f3ff 40%, #bc13fe 60%, #ffffff 80%);
 
-  /* Severity colors (Desaturated/Muted) */
-  --severity-critical: #ef4444;
-  --severity-critical-bg: rgba(239, 68, 68, 0.1);
-  --severity-high: #f97316;
-  --severity-high-bg: rgba(249, 115, 22, 0.1);
-  --severity-medium: #eab308;
-  --severity-medium-bg: rgba(234, 179, 8, 0.1);
-  --severity-low: #3b82f6;
-  --severity-low-bg: rgba(59, 130, 246, 0.1);
+  /* Severity colors (Prism-like) */
+  --severity-critical: #ff2a6d;
+  --severity-critical-bg: rgba(255, 42, 109, 0.1);
+  --severity-high: #ff9f1c;
+  --severity-high-bg: rgba(255, 159, 28, 0.1);
+  --severity-medium: #fce100;
+  --severity-medium-bg: rgba(252, 225, 0, 0.1);
+  --severity-low: #05d9e8;
+  --severity-low-bg: rgba(5, 217, 232, 0.1);
 
-  /* Status colors */
-  --status-analyzed: #10b981;
-  --status-pending: #f59e0b;
+  /* Status */
+  --status-analyzed: #00d2ff;
+  --status-pending: #fce100;
+  --status-detected: #bc13fe;
+  --status-analyzing: #ff9f1c;
+  --status-actions-pending: #ff9f1c;
+  --status-resolved: #05d9e8;
+  --approval-pending: #fce100;
+  --approval-approved: #00d2ff;
+  --approval-rejected: #ff2a6d;
+  --approval-rollback: #bc13fe;
 
-  /* Advanced shadows */
+  /* Advanced shadows (Prism Effect) */
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.8);
-  --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-prism: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 20px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.05);
 
   /* Fonts */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   /* Spacing */
-  --radius-sm: 6px;
+  --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-lg: 16px;
 }
 
 /* Reset */
@@ -78,40 +91,25 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 
-  /* ULTRA COOL Ambient Background */
-  background-color: #000000;
+  background-color: var(--bg-primary);
+  /* Prism Noise Texture */
   background-image:
-    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
-  animation: bgBreath 20s ease-in-out infinite alternate;
+    radial-gradient(at 100% 0%, rgba(188, 19, 254, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(0, 243, 255, 0.08) 0px, transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+
+  /* Subtle shift */
+  animation: bgShift 30s ease-in-out infinite alternate;
 }
 
-@keyframes bgBreath {
+@keyframes bgShift {
   0% {
     background-position: 0% 0%;
   }
 
   100% {
-    background-position: 10% 10%;
+    background-position: 100% 100%;
   }
-}
-
-/* Scanlines Overlay */
-.scanlines {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.1) 50%,
-      rgba(0, 0, 0, 0.1));
-  background-size: 100% 4px;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.3;
 }
 
 #root {
@@ -119,10 +117,10 @@ body {
   display: flex;
 }
 
-/* Premium Scrollbars */
+/* Premium Scrollbars (Chrome/Silver) */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -130,96 +128,115 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #1a1a1a, #333333);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
-/* Premium Glass Panel with Cursor Spotlight */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Base Glass Panel - No Borders, Just Shine */
 .glass-panel {
   background: var(--glass-card);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-glass), var(--shadow-inner);
+  box-shadow: var(--shadow-prism);
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Spotlight Effect via Radial Gradient tracking mouse */
-.glass-panel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      rgba(255, 255, 255, 0.06),
-      transparent 40%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.glass-panel:hover::after {
-  opacity: 1;
-}
-
+/* Prism Glint on Hover */
 .glass-panel::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg,
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right,
       transparent,
-      rgba(255, 255, 255, 0.03),
-      /* Subtle shine */
+      rgba(255, 255, 255, 0.1),
       transparent);
+  transform: skewX(-25deg);
+  transition: left 0.6s ease;
   pointer-events: none;
-  opacity: 0.5;
 }
 
-/* Cyber Enterprise Hover Effect */
+.glass-panel:hover::before {
+  left: 200%;
+}
+
 .glass-panel:hover {
-  transform: translateY(-2px);
-  background: var(--glass-card-hover);
   border-color: rgba(255, 255, 255, 0.15);
-  box-shadow:
-    0 15px 40px rgba(0, 0, 0, 0.9),
-    0 0 20px rgba(255, 255, 255, 0.03);
-  /* Glow */
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 
-/* Edge Lighting Animation (Optional, could be too distracting, simplified here) */
-
-/* Micro Interactions */
-button,
-a,
-.interactive {
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease;
+/* Chromatic Aberration Text Effect Utility */
+.text-holo {
+  position: relative;
+  display: inline-block;
+  color: white;
 }
 
-button:active {
-  transform: scale(0.96);
+.text-holo:hover {
+  animation: chromaticText 0.3s steps(3) infinite;
 }
 
-/* Reduced Motion Animations */
+@keyframes chromaticText {
+  0% {
+    text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff;
+  }
+
+  25% {
+    text-shadow: -2px 0 #bc13fe, 2px 0 #fce100;
+  }
+
+  50% {
+    text-shadow: 2px 0 #00f3ff, -2px 0 #ff0055;
+  }
+
+  75% {
+    text-shadow: -2px 0 #fce100, 2px 0 #bc13fe;
+  }
+
+  100% {
+    text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff;
+  }
+}
+
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
-    filter: blur(4px);
+    transform: translateY(10px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
 .fade-in {
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  /* Smooth 'Apple' feel easing */
+  animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Prism Gradient Text */
+.text-gradient {
+  background: var(--gradient-holo-text);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
