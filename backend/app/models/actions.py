@@ -1,5 +1,5 @@
 """Remediation action and approval models."""
-from pydantic import BaseModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 from datetime import datetime
 from enum import Enum
@@ -20,19 +20,23 @@ class RiskLevel(str, Enum):
     CRITICAL = "critical"
 
 
-class RemediationAction(BaseModel):
+class RemediationAction(SQLModel, table=True):
     """A suggested remediation action requiring human approval."""
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    incident_id: str
+    __tablename__ = "remediation_actions"
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
+    # Link to incident
+    incident_id: str = Field(foreign_key="incidents.id")
+    
     title: str
     description: str
     command_hint: str = ""
-    risk_level: RiskLevel = RiskLevel.MEDIUM
-    approval_status: ApprovalStatus = ApprovalStatus.PENDING
+    risk_level: RiskLevel = Field(default=RiskLevel.MEDIUM)
+    approval_status: ApprovalStatus = Field(default=ApprovalStatus.PENDING)
     approved_by: Optional[str] = None
     approved_at: Optional[datetime] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     rollback_description: str = ""
 
-    class Config:
-        json_encoders = {datetime: lambda v: v.isoformat()}
+    # Optional relationship if needed later
+    # incident: Optional["Incident"] = Relationship(back_populates="actions")

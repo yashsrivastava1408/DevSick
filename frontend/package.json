@@ -11,7 +11,9 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test"
+        "test": "react-scripts test",
+        "dev": "cd .. && npm run dev",
+        "dev:local": "cd .. && npm run dev:local"
     },
     "proxy": "http://localhost:8000",
     "browserslist": {

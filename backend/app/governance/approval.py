@@ -4,74 +4,89 @@ Manages the approval workflow for remediation actions.
 No action is executed without explicit human approval.
 """
 from datetime import datetime
-from typing import Dict, List, Optional
-from ..models.actions import RemediationAction, ApprovalStatus
+from typing import List, Optional
+from sqlmodel import Session, select
+from ..models.actions import RemediationAction, ApprovalStatus, RiskLevel
 
 
 class ApprovalManager:
     """Manages the approval lifecycle for remediation actions."""
 
     def __init__(self):
-        self._actions: Dict[str, RemediationAction] = {}
+        self.auto_pilot = False  # Protocol Alpha (Manual) by default
 
-    def register_actions(self, actions: List[RemediationAction]):
+    def register_actions(self, session: Session, actions: List[RemediationAction]):
         """Register new actions for approval tracking."""
         for action in actions:
-            self._actions[action.id] = action
-
-    def get_action(self, action_id: str) -> Optional[RemediationAction]:
+            # Protocol Omega: Auto-approve LOW risk actions
+            if self.auto_pilot and action.risk_level == RiskLevel.LOW:
+                action.approval_status = ApprovalStatus.APPROVED
+                action.approved_by = "auto-pilot"
+                action.approved_at = datetime.utcnow()
+            
+            session.add(action)
+        session.commit()
+        # Refresh to get IDs if needed, but not strictly required for batch insert performance
+    
+    def get_action(self, session: Session, action_id: str) -> Optional[RemediationAction]:
         """Get a specific action by ID."""
-        return self._actions.get(action_id)
+        return session.get(RemediationAction, action_id)
 
-    def get_actions_for_incident(self, incident_id: str) -> List[RemediationAction]:
+    def get_actions_for_incident(self, session: Session, incident_id: str) -> List[RemediationAction]:
         """Get all actions for a specific incident."""
-        return [
-            a for a in self._actions.values()
-            if a.incident_id == incident_id
-        ]
+        statement = select(RemediationAction).where(RemediationAction.incident_id == incident_id)
+        return session.exec(statement).all()
 
-    def get_pending_actions(self) -> List[RemediationAction]:
+    def get_pending_actions(self, session: Session) -> List[RemediationAction]:
         """Get all actions awaiting approval."""
-        return [
-            a for a in self._actions.values()
-            if a.approval_status == ApprovalStatus.PENDING
-        ]
+        statement = select(RemediationAction).where(RemediationAction.approval_status == ApprovalStatus.PENDING)
+        return session.exec(statement).all()
 
-    def approve_action(self, action_id: str, approved_by: str = "admin") -> Optional[RemediationAction]:
+    def approve_action(self, session: Session, action_id: str, approved_by: str = "admin") -> Optional[RemediationAction]:
         """Approve a remediation action."""
-        action = self._actions.get(action_id)
+        action = session.get(RemediationAction, action_id)
         if action and action.approval_status == ApprovalStatus.PENDING:
             action.approval_status = ApprovalStatus.APPROVED
             action.approved_by = approved_by
             action.approved_at = datetime.utcnow()
+            session.add(action)
+            session.commit()
+            session.refresh(action)
             return action
         return None
 
-    def reject_action(self, action_id: str, rejected_by: str = "admin") -> Optional[RemediationAction]:
+    def reject_action(self, session: Session, action_id: str, rejected_by: str = "admin") -> Optional[RemediationAction]:
         """Reject a remediation action."""
-        action = self._actions.get(action_id)
+        action = session.get(RemediationAction, action_id)
         if action and action.approval_status == ApprovalStatus.PENDING:
             action.approval_status = ApprovalStatus.REJECTED
             action.approved_by = rejected_by
             action.approved_at = datetime.utcnow()
+            session.add(action)
+            session.commit()
+            session.refresh(action)
             return action
         return None
 
-    def rollback_action(self, action_id: str) -> Optional[RemediationAction]:
+    def rollback_action(self, session: Session, action_id: str) -> Optional[RemediationAction]:
         """Mark an approved action for rollback."""
-        action = self._actions.get(action_id)
+        action = session.get(RemediationAction, action_id)
         if action and action.approval_status == ApprovalStatus.APPROVED:
             action.approval_status = ApprovalStatus.ROLLED_BACK
+            session.add(action)
+            session.commit()
+            session.refresh(action)
             return action
         return None
 
-    def get_all(self) -> List[RemediationAction]:
+    def get_all(self, session: Session) -> List[RemediationAction]:
         """Get all tracked actions."""
-        return list(self._actions.values())
+        return session.exec(select(RemediationAction)).all()
 
     def clear(self):
         """Clear all actions."""
-        self._actions.clear()
+        # Using DB, clear is handled by deleting rows in simulation reset
+        pass
 
 
 # Global singleton

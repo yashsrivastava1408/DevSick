@@ -107,33 +107,49 @@ graph TD
 - Docker (optional)
 - Groq API key ([free at console.groq.com](https://console.groq.com))
 
-### Option 1: Docker (Recommended)
+### Option 3: Production/Server Deployment
+If you are deploying to a dedicated Linux server:
 
 ```bash
-# Clone the repository
-git clone https://github.com/yashsrivastava1408/DevSick.git
-cd DevSick
+# Clone and enter
+git clone https://github.com/yashsrivastava1408/DevSick.git && cd DevSick
 
-# Add your Groq API key
-echo "GROQ_API_KEY=your_key_here" > .env
-
-# Run
-docker compose up --build
+# One-click install
+./deploy.sh
 ```
 
-### Option 2: Manual Setup
+---
 
+## 🏆 Hackathon Guide (For Judges)
+
+To see the true power of **Devsick** during your evaluation, follow these steps:
+
+1. **Protocol Switch**: In the Dashboard, manually toggle from **Protocol Alpha** (Manual) to **Protocol Omega** (Autonomous).
+2. **The "Boom" Moment**: Click **Simulate Incidents**. Notice that while critical alerts are flagged for you, the systems **automatically resolves** low-risk errors (like secret refreshes) in real-time.
+3. **Traceability**: Click any resolved incident to see the AI's "Reasoning Chain"—it doesn't just fix things, it explains *why*.
+
+---
+
+## Production Deployment & Access
+To "insert" Devsick into your enterprise environment, follow these standard practices:
+
+### 1. Networking & Reverse Proxy
+For production, we recommend putting Devsick behind **Nginx** or **Traefik**:
+- **Port 3000**: Expose for the Frontend UI.
+- **Port 8000**: Expose for the Ingestion API.
+
+### 2. Service Access (RBAC)
+To allow Devsick to actually execute remediation actions on your server:
+- **Kubernetes**: Deploy Devsick with a `ServiceAccount` that has the `ClusterRole` permissions to `get/list/watch` logs and `patch` deployments.
+- **Bare Metal**: Provide an SSH key or a `sudoer` service user specifically for Devsick's backend container.
+
+### 3. Log Ingestion
+Pipe your server's logs to Devsick using standard collectors:
 ```bash
-# Backend
-cd backend
-pip install -r requirements.txt
-export GROQ_API_KEY=your_key_here
-uvicorn app.main:app --reload --port 8000
-
-# Frontend (separate terminal)
-cd frontend
-npm install
-npm start
+# Example: Sending a log via CURL
+curl -X POST http://<server-ip>:8000/api/ingest \
+     -H "Content-Type: application/json" \
+     -d '{"source_service": "auth", "severity": "error", "message": "Connection timeout"}'
 ```
 
 ### Access

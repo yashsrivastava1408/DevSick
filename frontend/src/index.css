@@ -6,21 +6,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* VOID Blacks (Noise Textured) */
-  --bg-primary: #050507;
-  --bg-secondary: #0a0a0f;
-  --bg-tertiary: #101015;
+  /* Atmospheric Slate (Deep Space) */
+  --bg-primary: #0e0e16;
+  --bg-secondary: #14141f;
+  --bg-tertiary: #1a1a2b;
 
-  /* Glass — Crystalline */
-  --glass-card: rgba(255, 255, 255, 0.03);
-  --glass-card-hover: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-edge: rgba(255, 255, 255, 0.2);
-  --glass-shine: rgba(255, 255, 255, 0.08);
+  /* Glass — Crystalline Refraction */
+  --glass-card: rgba(255, 255, 255, 0.05);
+  --glass-card-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(255, 255, 255, 0.25);
+  --glass-shine: rgba(255, 255, 255, 0.12);
 
   /* Elevated surfaces */
-  --bg-input: rgba(20, 20, 25, 0.7);
-  --bg-elevated: rgba(30, 30, 35, 0.8);
+  --bg-input: rgba(30, 30, 40, 0.6);
+  --bg-elevated: rgba(40, 40, 50, 0.7);
 
   /* Typography */
   --text-primary: #ffffff;
@@ -92,14 +92,18 @@ body {
   overflow-x: hidden;
 
   background-color: var(--bg-primary);
-  /* Prism Noise Texture */
+  /* Prism Mesh & Fog Texture */
   background-image:
-    radial-gradient(at 100% 0%, rgba(188, 19, 254, 0.08) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(0, 243, 255, 0.08) 0px, transparent 50%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    radial-gradient(at 0% 0%, rgba(0, 243, 255, 0.1) 0px, transparent 40%),
+    radial-gradient(at 100% 0%, rgba(188, 19, 254, 0.1) 0px, transparent 40%),
+    radial-gradient(at 50% 100%, rgba(255, 0, 85, 0.05) 0px, transparent 50%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px, auto;
 
   /* Subtle shift */
-  animation: bgShift 30s ease-in-out infinite alternate;
+  animation: bgShift 40s ease-in-out infinite alternate;
 }
 
 @keyframes bgShift {

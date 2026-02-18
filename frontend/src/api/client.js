@@ -35,6 +35,8 @@ export const getPendingActions = () => request('/api/actions/pending');
 export const approveAction = (id) => request(`/api/actions/${id}/approve`, { method: 'POST' });
 export const rejectAction = (id) => request(`/api/actions/${id}/reject`, { method: 'POST' });
 export const rollbackAction = (id) => request(`/api/actions/${id}/rollback`, { method: 'POST' });
+export const getGovernanceStatus = () => request('/api/governance/status');
+export const toggleGovernanceMode = () => request('/api/governance/toggle', { method: 'POST' });
 
 // Graph
 export const getGraph = () => request('/api/graph');

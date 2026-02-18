@@ -37,6 +37,116 @@
     opacity: 0.8;
 }
 
+/* Protocol Switch - Glass Morphism */
+.protocol-badge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 16px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    user-select: none;
+    backdrop-filter: blur(10px);
+}
+
+.protocol-badge:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.protocol-badge.alpha {
+    border-color: rgba(0, 243, 255, 0.3);
+}
+
+.protocol-badge.omega {
+    border-color: rgba(255, 42, 109, 0.3);
+    background: rgba(255, 42, 109, 0.05);
+}
+
+.protocol-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.protocol-badge.alpha .protocol-icon {
+    background: rgba(0, 243, 255, 0.1);
+    color: #00f3ff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.protocol-badge.omega .protocol-icon {
+    background: rgba(255, 42, 109, 0.1);
+    color: #ff2a6d;
+    box-shadow: 0 0 15px rgba(255, 42, 109, 0.2);
+}
+
+.protocol-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.protocol-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.protocol-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-display);
+}
+
+.protocol-toggle {
+    margin-left: 8px;
+}
+
+.toggle-track {
+    width: 36px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toggle-track.active {
+    background: rgba(255, 42, 109, 0.4);
+    border-color: rgba(255, 42, 109, 0.6);
+}
+
+.toggle-thumb {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-track.active .toggle-thumb {
+    transform: translateX(16px);
+    background: #fff;
+}
+
 /* Stats bar - Liquid Layout */
 .stats-bar {
     display: grid;
@@ -106,24 +216,28 @@
 .stat-value.critical {
     background: linear-gradient(135deg, #fff, #ff2a6d);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .stat-value.warning {
     background: linear-gradient(135deg, #fff, #ff9f1c);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .stat-value.info {
     background: linear-gradient(135deg, #fff, #00f3ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .stat-value.success {
     background: linear-gradient(135deg, #fff, #00d2ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

@@ -113,6 +113,19 @@
     padding: 32px;
 }
 
+/* Glass Detail for subsections */
+.section-subsection {
+    margin-bottom: 32px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-subsection:last-child {
+    margin-bottom: 0;
+}
+
 /* Timeline - Elegant Vertical Line */
 .timeline {
     position: relative;
@@ -254,15 +267,24 @@
     color: var(--text-primary);
 }
 
-/* Confidence Bar - Clean */
+/* Confidence Bar - Clean & Vibrant */
 .confidence-bar {
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-top: 24px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.confidence-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .confidence-track {
@@ -302,7 +324,28 @@
     justify-content: space-between;
     padding: 16px 24px;
     background: rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.05);
+    /* Slightly thicker to separate from body */
+}
+
+.action-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.action-card-body {
+    padding: 24px;
+}
+
+.action-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 .action-command {
@@ -314,6 +357,50 @@
     color: #fff;
     margin-bottom: 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-x: auto;
+}
+
+.action-rollback {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-style: italic;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-sm {
+    padding: 10px 24px;
+    font-size: 13px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.btn-approve {
+    background: #fff;
+    color: #000;
+    border: none;
+}
+
+.btn-approve:hover {
+    background: #eee;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.btn-reject {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-reject:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .risk-tag {

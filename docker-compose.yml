@@ -5,6 +5,8 @@ services:
       - "8000:8000"
     environment:
       - GROQ_API_KEY=${GROQ_API_KEY:-}
+    volumes:
+      - ./devsick.db:/app/devsick.db
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health" ]
       interval: 30s

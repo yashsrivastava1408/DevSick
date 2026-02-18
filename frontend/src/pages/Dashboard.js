@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
-import { getIncidents, getStats, simulateScenario, resetSimulation } from '../api/client';
-import { Activity, AlertTriangle, CheckCircle, Rocket, RefreshCw, Trash2, Search } from '../components/Icons';
+import { getIncidents, getStats, simulateScenario, resetSimulation, getGovernanceStatus, toggleGovernanceMode } from '../api/client';
+import { Activity, AlertTriangle, CheckCircle, Rocket, RefreshCw, Trash2, Search, Zap, ShieldCheck } from '../components/Icons';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -11,12 +11,20 @@ function Dashboard() {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [simulating, setSimulating] = useState(false);
+    const [autoPilot, setAutoPilot] = useState(false);
+    const [governanceMode, setGovernanceMode] = useState('Protocol Alpha');
 
     const fetchData = useCallback(async () => {
         try {
-            const [inc, st] = await Promise.all([getIncidents(), getStats()]);
+            const [inc, st, gov] = await Promise.all([
+                getIncidents(),
+                getStats(),
+                getGovernanceStatus()
+            ]);
             setIncidents(inc);
             setStats(st);
+            setAutoPilot(gov.auto_pilot);
+            setGovernanceMode(gov.mode);
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {
@@ -37,6 +45,16 @@ function Dashboard() {
             console.error('Simulation failed:', err);
         } finally {
             setSimulating(false);
+        }
+    };
+
+    const handleToggleGovernance = async () => {
+        try {
+            const res = await toggleGovernanceMode();
+            setAutoPilot(res.auto_pilot);
+            setGovernanceMode(res.mode);
+        } catch (err) {
+            console.error('Failed to toggle governance:', err);
         }
     };
 
@@ -77,7 +95,20 @@ function Dashboard() {
                     <p>AI-powered incident detection, correlation, and root cause analysis</p>
                 </div>
                 <div className="header-actions">
-                    {/* Placeholder for header actions if needed */}
+                    <div className={`protocol-badge ${autoPilot ? 'omega' : 'alpha'}`} onClick={handleToggleGovernance}>
+                        <div className="protocol-icon">
+                            {autoPilot ? <Zap size={14} /> : <ShieldCheck size={14} />}
+                        </div>
+                        <div className="protocol-info">
+                            <span className="protocol-label">Governance Mode</span>
+                            <span className="protocol-name">{governanceMode}</span>
+                        </div>
+                        <div className="protocol-toggle">
+                            <div className={`toggle-track ${autoPilot ? 'active' : ''}`}>
+                                <div className="toggle-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

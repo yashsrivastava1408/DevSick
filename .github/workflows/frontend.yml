@@ -1,37 +1,48 @@
 name: Frontend CI
 
 on:
-    push:
-        paths:
-            - "frontend/**"
-    pull_request:
-        paths:
-            - "frontend/**"
-    workflow_dispatch:
+  push:
+    paths:
+      - "frontend/**"
+  pull_request:
+    paths:
+      - "frontend/**"
+  workflow_dispatch:
 
 jobs:
-    frontend-build:
-        runs-on: ubuntu-latest
+  frontend-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
+        run: npm test -- --watchAll=false --passWithNoTests
 
-        defaults:
-            run:
-                working-directory: ./frontend
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - name: Use Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20"
-                  cache: "npm"
-                  cache-dependency-path: frontend/package-lock.json
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Build
-              run: npm run build --if-present
-
-            - name: Test
-              run: npm test -- --watchAll=false --passWithNoTests
+  frontend-build:
+    needs: frontend-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present

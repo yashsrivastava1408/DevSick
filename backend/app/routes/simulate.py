@@ -10,15 +10,18 @@ import json
 import os
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import APIRouter, Query
-from ..models.events import LogEventCreate, SeverityLevel
-from ..models.incidents import IncidentStatus
+from fastapi import APIRouter, Query, Depends
+from sqlmodel import Session, delete
+from ..models.events import LogEventCreate, SeverityLevel, LogEvent
+from ..models.incidents import IncidentStatus, Incident
+from ..models.actions import RemediationAction
 from ..ingestion.log_ingestor import event_store
 from ..correlation.engine import correlate_events
 from ..reasoning.ai_engine import analyze_incident
 from ..recommendations.engine import generate_recommendations
 from ..governance.approval import approval_manager
-from .incidents import add_incident, get_incident_store
+from .incidents import add_incident
+from ..database import get_session
 
 router = APIRouter(prefix="/api", tags=["Simulation"])
 
@@ -42,7 +45,8 @@ async def simulate_scenario(
     scenario: Optional[str] = Query(
         default=None,
         description="Scenario to simulate: vault_auth_failure, database_jwt_missing, api_auth_cascade. Leave empty for all."
-    )
+    ),
+    session: Session = Depends(get_session)
 ):
     """Simulate one or all incident scenarios.
     
@@ -70,24 +74,35 @@ async def simulate_scenario(
                 metadata=evt.get("metadata", {}),
                 timestamp=base_time + timedelta(seconds=evt["timestamp_offset_seconds"]),
             )
-            stored = event_store.ingest(event_create)
+            # Pass session to ingestor
+            stored = event_store.ingest(session, event_create)
             events.append(stored)
 
         # 2. Correlate events into an incident
         incident = correlate_events(events)
         
         # 3. Run AI analysis
+        # Note: analyze_incident returns an RCA object (part of the model definition)
         rca = await analyze_incident(incident)
-        incident.root_cause_analysis = rca
+        
+        # Flatten RCA into incident
+        incident.rca_summary = rca.summary
+        incident.rca_root_cause = rca.root_cause
+        incident.rca_confidence_score = rca.confidence_score
+        incident.rca_impact_description = rca.impact_description
+        incident.rca_reasoning_chain = rca.reasoning_chain
+        incident.affected_services = rca.affected_services
+        
         incident.status = IncidentStatus.ANALYZED
 
         # 4. Generate recommendations
         actions = generate_recommendations(incident)
-        approval_manager.register_actions(actions)
+        approval_manager.register_actions(session, actions)
+        
         incident.status = IncidentStatus.ACTIONS_PENDING
 
         # Store the incident
-        add_incident(incident)
+        add_incident(session, incident)
 
         results.append({
             "scenario": scenario_id,
@@ -102,6 +117,9 @@ async def simulate_scenario(
 
         # Offset base time for next scenario
         base_time += timedelta(minutes=5)
+    
+    # Commit all changes (events, incidents, actions)
+    session.commit()
 
     return {
         "message": f"Simulated {len(results)} scenario(s)",
@@ -110,9 +128,19 @@ async def simulate_scenario(
 
 
 @router.post("/reset")
-async def reset_simulation():
+async def reset_simulation(session: Session = Depends(get_session)):
     """Reset all data — clear events, incidents, and actions."""
-    event_store.clear()
-    get_incident_store().clear()
+    # Delete all rows from tables
+    session.exec(delete(LogEvent))
+    session.exec(delete(Incident))
+    session.exec(delete(RemediationAction))
+    # Also delete timeline entries if needed
+    # session.exec(delete(TimelineEntry))
+    
+    session.commit()
+    
+    # Still clear in-memory managers if they hold state
+    # event_store.clear(session) 
     approval_manager.clear()
-    return {"message": "All simulation data cleared"}
+    
+    return {"message": "All simulation data cleared (DB truncated)"}
