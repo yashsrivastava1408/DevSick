@@ -154,11 +154,12 @@ curl -X POST http://<server-ip>:8000/api/ingest \
 
 ### Access
 
-| Service | URL |
-|---------|-----|
 | Dashboard | http://localhost:3000 |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3001 |
 | API Docs (Swagger) | http://localhost:8000/docs |
 | Health Check | http://localhost:8000/api/health |
+| Metrics | http://localhost:8000/metrics |
 
 ---
 
@@ -279,7 +280,7 @@ Devsick/
 | **Frontend** | React 18 | Enterprise dashboard with dark theme |
 | **Validation** | Pydantic v2 | Data models and schema validation |
 | **Deployment** | Docker Compose | Multi-container orchestration |
-| **Data** | In-memory + JSON | Zero-dependency data layer |
+| **Data** | SQLModel (SQLite) | Persistent storage with transactional integrity |
 
 ---
 
@@ -292,6 +293,17 @@ Devsick uses **structured prompting** — not chat. The AI receives:
 3. **Output format**: Strict JSON with `root_cause`, `reasoning_chain`, `confidence_score`, `impact_description`
 
 The prompt engineering ensures consistent, auditable RCA output rather than free-form text.
+
+---
+
+## Future Roadmap
+
+To move Devsick from a high-end prototype to an enterprise-grade platform, the following enhancements are planned:
+
+- [ ] **Observability Integration**: Deep integration with Prometheus, Grafana, and Loki for real-time metric analysis.
+- [ ] **Enterprise Persistence**: Migration option from SQLite to PostgreSQL for high-availability deployments.
+- [ ] **Extended Event Sources**: Native hooks for Kubernetes Event Stream, Argo CD sync failures, and Jenkins pipeline statuses.
+- [ ] **Distributed Tracing**: Integration with OpenTelemetry to map requests across microservices.
 
 ---
 

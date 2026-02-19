@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .routes import ingest, incidents, actions, graph, simulate
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -23,6 +24,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Instrument the app for Prometheus
+Instrumentator().instrument(app).expose(app)
 
 # Register routes
 app.include_router(ingest.router)

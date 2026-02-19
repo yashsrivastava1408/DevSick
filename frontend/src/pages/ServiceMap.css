@@ -1,0 +1,144 @@
+.clean-map {
+    padding: 20px 0;
+    width: 100%;
+}
+
+/* ================= HEADER ================= */
+
+.neural-header h1 {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+.neural-header p {
+    opacity: .6;
+}
+
+/* ================= MAP CONTAINER ================= */
+
+.clean-map-container {
+    position: relative;
+    height: calc(100vh - 280px);
+    min-height: 500px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #040406;
+    border: 1px solid rgba(255, 255, 255, .06);
+}
+
+/* animated gradient background */
+
+.neural-bg {
+    position: absolute;
+    inset: -50%;
+    background:
+        radial-gradient(circle at 30% 40%, rgba(0, 243, 255, .08), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(255, 0, 100, .08), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    filter: blur(100px);
+}
+
+@keyframes rotateBg {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ================= SVG ================= */
+
+.neural-svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* ================= EDGES ================= */
+
+.neural-edge {
+    stroke: rgba(255, 255, 255, .08);
+    stroke-width: 1.5px;
+    fill: none;
+}
+
+.neural-edge.active {
+    stroke: #00f3ff;
+    filter: drop-shadow(0 0 8px #00f3ff);
+}
+
+/* ================= SIGNAL PARTICLE ================= */
+
+.signal {
+    fill: #00f3ff;
+    filter: drop-shadow(0 0 6px #00f3ff);
+}
+
+/* ================= NODES ================= */
+
+.neural-node {
+    cursor: pointer;
+    transition: transform .3s ease;
+}
+
+.neural-node:hover {
+    transform: scale(1.1);
+}
+
+.node-core {
+    fill: rgba(20, 20, 30, .95);
+    stroke: rgba(255, 255, 255, .1);
+    stroke-width: 2px;
+}
+
+.neural-node.root .node-core {
+    stroke: #ff2a6d;
+    animation: pulseRoot 2s infinite;
+}
+
+@keyframes pulseRoot {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 10px rgba(255, 42, 109, .5));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 25px rgba(255, 42, 109, 1));
+    }
+}
+
+.neural-node.affected .node-core {
+    stroke: #ffaa00;
+}
+
+.neural-node text {
+    fill: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ================= IMPACT PANEL ================= */
+
+.impact-panel {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 20px;
+    background: #0b0b10;
+    border: 1px solid rgba(255, 255, 255, .05);
+}
+
+.impact-chain {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.impact-tag {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #111;
+}
