@@ -1,28 +1,26 @@
 <p align="center">
-  <h1 align="center">Devsick</h1>
+  <h1 align="center">DEVSICK: PROJECT SENTINEL</h1>
   <p align="center">
-    <strong>AI-Driven Application Support & Operations Platform</strong>
+    <strong>Autonomous Infrastructure Intelligence & AI Command Center</strong>
   </p>
   <p align="center">
-    An enterprise-grade AI incident reasoning engine that correlates operational signals,<br/>
-    identifies root causes, and recommends remediation — with human-in-the-loop governance.
+    A premium, cinematic AI incident reasoning engine that correlates operational signals,<br/>
+    identifies root causes, and executes autonomous remediation — with human-in-the-loop governance.
   </p>
   <p align="center">
-    <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-    <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-    <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-    <img src="https://img.shields.io/badge/Groq_AI-Llama_3.1-FF6B35?style=for-the-badge&logo=meta&logoColor=white" alt="Groq" />
-    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+    <img src="https://img.shields.io/badge/AESTHETIC-COBALT_%26_FLARE-4338ca?style=for-the-badge" alt="Aesthetic" />
+    <img src="https://img.shields.io/badge/UI-HUD_TELEMETRY-f59e0b?style=for-the-badge" alt="UI" />
+    <img src="https://img.shields.io/badge/ENGINE-LAMMA_3.3_70B-white?style=for-the-badge" alt="Engine" />
   </p>
   <p align="center">
-    <img src="https://img.shields.io/badge/Status-Prototype_MVP-blueviolet?style=for-the-badge" alt="Status" />
+    <img src="https://img.shields.io/badge/Status-Project_Sentinel_v5.0-blueviolet?style=for-the-badge" alt="Status" />
     <img src="https://img.shields.io/badge/Maintenance-Active_Development-yellow?style=for-the-badge" alt="Maintenance" />
   </p>
 </p>
 
 ---
 
-> **Note: This is NOT a chatbot.** Devsick is a structured incident reasoning pipeline — it ingests logs, correlates events, maps service dependencies, and uses AI to generate root cause analysis with actionable remediation playbooks.
+> **Note: Deployment of Protocol Omega is active.** Devsick is a structured incident reasoning pipeline — it ingests high-velocity logs, correlates events across the service graph, and uses Llama 3.3 to generate autonomous remediation playbooks.
 
 ---
 
@@ -86,15 +84,14 @@ graph TD
 
 ## Key Features
 
-| Feature | Description |
+| Feature | Technical Specification |
 |---------|-------------|
-| **Event Correlation** | Groups related errors across services using time windows and dependency mapping |
-| **AI Root Cause Analysis** | Llama 3.1 via Groq API generates structured RCA with reasoning chains |
-| **Confidence Scoring** | Each analysis includes a confidence score (0–100%) |
-| **Remediation Playbooks** | Pre-built action plans with `kubectl` commands and rollback procedures |
-| **Human Governance** | Approve/reject workflow — AI never auto-executes on production |
-| **Dependency Mapping** | Knowledge graph tracks service relationships and cascade paths |
-| **Graceful Degradation** | Falls back to mock RCA when Groq API is unavailable |
+| **Cinematic HUD** | 4-corner telemetry grid with real-time system metrics (0.42ms core latency) |
+| **Project Sentinel AI** | Llama 3.3 via Groq API generating structured reasoning chains at scale |
+| **Obsidian Identity** | Premium Cobalt & Flare aesthetic with liquid scanlines and neural phosphor accents |
+| **Autonomous Healing** | Protocol-driven governance allowing for single-click or fully automated resolution |
+| **Brutal Typography** | High-impact Syncopate & Space Grotesk hierarchy for maximum technical clarity |
+| **Monitoring Stack** | Deep integration with Prometheus & Grafana for mission-critical visibility |
 
 ---
 
@@ -107,7 +104,28 @@ graph TD
 - Docker (optional)
 - Groq API key ([free at console.groq.com](https://console.groq.com))
 
-### Option 3: Production/Server Deployment
+### Deployment Options
+
+#### Option 1: Docker Compose (Recommended)
+The fastest way to launch the full Sentinel stack:
+
+```bash
+# Start all services (Backend, Frontend, Prometheus, Grafana)
+docker compose up --build
+```
+
+#### Option 2: Local Development
+Perfect for rapid feature iteration:
+
+```bash
+# Install root dependencies
+npm install
+
+# Start both Backend & Frontend concurrently
+npm run dev:local
+```
+
+#### Option 3: One-Click Cloud Deploy
 If you are deploying to a dedicated Linux server:
 
 ```bash
@@ -120,7 +138,7 @@ git clone https://github.com/yashsrivastava1408/DevSick.git && cd DevSick
 
 ---
 
-## 🏆 Hackathon Guide (For Judges)
+## Hackathon Guide (For Judges)
 
 To see the true power of **Devsick** during your evaluation, follow these steps:
 
@@ -228,22 +246,12 @@ Devsick/
 │   │   ├── main.py                 # FastAPI application entry point
 │   │   ├── config.py               # Environment & model configuration
 │   │   ├── models/                 # Pydantic schemas
-│   │   │   ├── events.py           #   Log events, alerts
-│   │   │   ├── incidents.py        #   Incidents, RCA, timeline
-│   │   │   └── actions.py          #   Remediation actions, approvals
 │   │   ├── ingestion/              # Layer 1: Log ingestion
-│   │   │   └── log_ingestor.py     #   In-memory event store
 │   │   ├── correlation/            # Layer 2: Event correlation
-│   │   │   └── engine.py           #   Pattern matching + grouping
 │   │   ├── knowledge/              # Layer 3: Service graph
-│   │   │   └── dependency_graph.py #   Directed dependency graph
 │   │   ├── reasoning/              # Layer 4: AI analysis
-│   │   │   ├── ai_engine.py        #   Groq API integration
-│   │   │   └── prompts.py          #   Structured SRE prompts
 │   │   ├── recommendations/        # Layer 5: Action engine
-│   │   │   └── engine.py           #   Remediation playbooks
 │   │   ├── governance/             # Layer 6: Human-in-the-loop
-│   │   │   └── approval.py         #   Approve/reject state machine
 │   │   ├── routes/                 # API endpoints
 │   │   └── data/                   # Sample data + service graph
 │   ├── requirements.txt
@@ -251,12 +259,17 @@ Devsick/
 ├── frontend/
 │   ├── src/
 │   │   ├── api/client.js           # Backend API client
-│   │   ├── components/             # Sidebar, StatusBadge
-│   │   └── pages/                  # Dashboard, IncidentPage
+│   │   ├── components/             # Icons, Sidebar, StatusBadge (.jsx) 
+│   │   └── pages/                  # Dashboard, IncidentPage, LandingPage (.jsx)
+│   ├── public/
+│   │   └── background-loop.mp4     # Cinematic background asset
 │   ├── package.json
 │   └── Dockerfile
-├── docker-compose.yml
-├── .env                            # API keys (gitignored)
+├── infrastructure/             # Monitoring Stack
+│   ├── prometheus/             #   Prometheus configurations
+│   └── grafana/                #   Provisioned Dashboards & DataSources
+├── docker-compose.yml          # Multi-container orchestration
+├── .env                        # API keys (gitignored)
 └── README.md
 ```
 
@@ -275,12 +288,11 @@ Devsick/
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| **API** | Python FastAPI | High-performance async API framework |
-| **AI** | Groq + Llama 3.1 8B | Sub-second inference for incident reasoning |
-| **Frontend** | React 18 | Enterprise dashboard with dark theme |
-| **Validation** | Pydantic v2 | Data models and schema validation |
-| **Deployment** | Docker Compose | Multi-container orchestration |
-| **Data** | SQLModel (SQLite) | Persistent storage with transactional integrity |
+| **Branding** | Syncopate + Space Grotesk | Ultra-wide cinematic typography |
+| **Inference** | Groq + Llama 3.3 70B | Sub-second incident reasoning & RCA |
+| **Visuals** | CSS Glassmorphism + Scanlines | High-contrast technical HUD interface |
+| **Backend** | Python FastAPI + SQLModel | High-performance async service layer |
+| **Dashboards** | Grafana + Prometheus | Infrastructure monitoring & alerting |
 
 ---
 
