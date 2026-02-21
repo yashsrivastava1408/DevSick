@@ -48,6 +48,7 @@ def build_incident_prompt(
     events_text: str,
     service_context: str,
     metrics_context: str = "",
+    memory_context: str = "",
     scenario_type: str = "",
 ) -> str:
     """Build the user prompt with incident context."""
@@ -59,6 +60,9 @@ def build_incident_prompt(
 ## Infrastructure Metrics (Prometheus)
 {metrics_context}
 
+## Sentinel Memory (Similar Past Incidents)
+{memory_context if memory_context else "No similar incidents found in memory."}
+
 ## Service Architecture (Dependencies)
 {service_context}
 
@@ -67,9 +71,10 @@ Scenario Type: {scenario_type if scenario_type != 'unknown' else 'Unclassified -
 
 ## Instructions
 1. CORRELATE logs with metrics (e.g., does a log error match a CPU spike?)
-2. Identify the ROOT CAUSE — the single initial failure that triggered everything
-3. Trace the cascading failure path through the service dependency graph
-4. List immediate actions to restore service
+2. LEVERAGE memory of past incidents to inform the root cause and remediation.
+3. Identify the ROOT CAUSE — the single initial failure that triggered everything
+4. Trace the cascading failure path through the service dependency graph
+5. List immediate actions to restore service
 
 Respond with JSON only using the Protocol Omega schema."""
     return prompt

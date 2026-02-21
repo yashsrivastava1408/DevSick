@@ -5,6 +5,7 @@ import logging
 from ..database import get_session
 from ..correlation.engine import correlate_events
 from ..reasoning.ai_engine import analyze_incident
+from ..reasoning.orchestrator import sentinel_orchestrator
 from ..recommendations.engine import generate_recommendations
 from ..governance.approval import approval_manager
 from .incidents import add_incident
@@ -67,6 +68,9 @@ async def alert_webhook(request: Request, session: Session = Depends(get_session
         # 4. Generate recommendations
         actions = generate_recommendations(incident)
         approval_manager.register_actions(session, actions)
+        
+        # 5. Sentinel Orchestration (Multi-Agent Phase 3 Evolution)
+        await sentinel_orchestrator.handle_incident(incident, rca)
         
         incident.status = "ACTIONS_PENDING"
         add_incident(session, incident)

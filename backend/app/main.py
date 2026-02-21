@@ -59,6 +59,11 @@ async def startup_event():
     """Run on startup."""
     # Use create_task to run in background
     asyncio.create_task(loki_poller.poll())
+    
+    # Ingest docs into memory
+    from .knowledge.vector_store import incident_memory
+    incident_memory.ingest_documentation("README.md")
+    incident_memory.ingest_documentation("PRD.md")
 
 @app.on_event("shutdown")
 async def shutdown_event():

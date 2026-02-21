@@ -11,6 +11,7 @@ from ..config import settings
 from ..models.incidents import Incident, RootCauseAnalysis
 from ..knowledge.dependency_graph import dependency_graph
 from ..knowledge.metrics_fetcher import metrics_fetcher
+from ..knowledge.vector_store import incident_memory
 from .prompts import SYSTEM_PROMPT, build_incident_prompt, format_events_for_prompt
 
 logger = logging.getLogger(__name__)
@@ -116,7 +117,18 @@ async def _analyze_with_groq(incident: Incident) -> RootCauseAnalysis:
     metrics_data = await metrics_fetcher.get_incident_metrics(incident.created_at)
     metrics_text = json.dumps(metrics_data, indent=2)
     
-    user_prompt = build_incident_prompt(events_text, service_context, metrics_text, incident.scenario_type)
+    # RAG: Search for similar past incidents
+    query_text = f"Scenario: {incident.scenario_type} Title: {incident.title}"
+    past_incidents = incident_memory.find_similar_incidents(query_text)
+    memory_text = "\n".join([f"Similarity: {1-r['distance']:.2f}\nDocument: {r['document']}" for r in past_incidents])
+    
+    user_prompt = build_incident_prompt(
+        events_text, 
+        service_context, 
+        metrics_text, 
+        memory_text,
+        incident.scenario_type
+    )
 
     response = await client.chat.completions.create(
         model=settings.GROQ_MODEL,
