@@ -202,12 +202,93 @@ button.danger:hover {
     border-color: #f43f5e;
 }
 
-/* ================= 📋 INCIDENT TABLE ================= */
+/* ================= 📋 INCIDENT TABLE & MAIN GRID ================= */
+
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
 
 .table-card {
     background: var(--card-bg);
     border: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
+    width: 100%;
+}
+
+/* Event Feed Styles */
+.event-stream {
+    padding: 1.5rem;
+    max-height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.event-row {
+    font-size: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    gap: 0.75rem;
+}
+
+.ev-time {
+    color: #64748b;
+}
+
+.ev-service {
+    color: var(--cobalt-indigo);
+    font-weight: 700;
+    width: 80px;
+}
+
+.ev-msg {
+    color: #cbd5e1;
+}
+
+.event-row.error .ev-msg {
+    color: #f43f5e;
+}
+
+.event-row.info .ev-service {
+    color: #10b981;
+}
+
+.pulse-icon {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-main-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .table-head {

@@ -5,13 +5,28 @@ services:
       - "8000:8000"
     environment:
       - GROQ_API_KEY=${GROQ_API_KEY:-}
-    volumes:
-      - ./devsick.db:/app/devsick.db
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=devsick-backend
+      - DATABASE_URL=postgresql://devsick:devsick123@db:5432/devsick
+    depends_on:
+      - db
+      - otel-collector
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=devsick
+      - POSTGRES_PASSWORD=devsick123
+      - POSTGRES_DB=devsick
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   frontend:
     build: ./frontend
@@ -25,7 +40,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     volumes:
-      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./infrastructure/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     depends_on:
@@ -42,3 +57,58 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     depends_on:
       - prometheus
+      - loki
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./infrastructure/loki/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.94.0
+    command: ["--config", "/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./infrastructure/otel/collector-config.yml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    depends_on:
+      - jaeger
+      - tempo
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.43
+    ports:
+      - "16686:16686" # UI
+      - "14268:14268" # collector HTTP
+      - "6831:6831/udp" # agent thrift compact
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+
+  tempo:
+    image: grafana/tempo:1.5.0
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./infrastructure/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command: --config.file=/etc/alertmanager/alertmanager.yml
+
+volumes:
+  postgres_data:

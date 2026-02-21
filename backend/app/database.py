@@ -1,10 +1,14 @@
 from sqlmodel import SQLModel, create_engine, Session
 from typing import Generator
 
-sqlite_file_name = "devsick.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from .config import settings
 
-connect_args = {"check_same_thread": False}
+sqlite_url = settings.DATABASE_URL
+
+connect_args = {}
+if sqlite_url.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
 engine = create_engine(sqlite_url, echo=False, connect_args=connect_args)
 
 

@@ -52,6 +52,27 @@ class DependencyGraph:
         self._adjacency: Dict[str, List[str]] = {}  # from -> [to]
         self._reverse: Dict[str, List[str]] = {}     # to -> [from]
 
+    def add_node(self, id: str, name: str, service_type: str = "service", tier: str = "app"):
+        """Add a service node dynamically."""
+        if id not in self.nodes:
+            self.nodes[id] = ServiceNode(id, name, service_type, tier)
+            self._adjacency.setdefault(id, [])
+            self._reverse.setdefault(id, [])
+
+    def add_edge(self, from_service: str, to_service: str, relation: str = "calls"):
+        """Add a dependency edge dynamically."""
+        # Ensure nodes exist
+        self.add_node(from_service, from_service)
+        self.add_node(to_service, to_service)
+        
+        # Check if edge already exists
+        exists = any(e.from_service == from_service and e.to_service == to_service for e in self.edges)
+        if not exists:
+            edge = DependencyEdge(from_service, to_service, relation)
+            self.edges.append(edge)
+            self._adjacency[from_service].append(to_service)
+            self._reverse[to_service].append(from_service)
+
     def load_from_file(self, filepath: Optional[str] = None):
         """Load the graph from the service_graph.json file."""
         if filepath is None:

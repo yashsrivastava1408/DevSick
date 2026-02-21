@@ -10,6 +10,7 @@ from typing import Optional
 from ..config import settings
 from ..models.incidents import Incident, RootCauseAnalysis
 from ..knowledge.dependency_graph import dependency_graph
+from ..knowledge.metrics_fetcher import metrics_fetcher
 from .prompts import SYSTEM_PROMPT, build_incident_prompt, format_events_for_prompt
 
 logger = logging.getLogger(__name__)
@@ -110,7 +111,12 @@ async def _analyze_with_groq(incident: Incident) -> RootCauseAnalysis:
 
     events_text = format_events_for_prompt(incident.timeline)
     service_context = dependency_graph.get_service_context(incident.affected_services)
-    user_prompt = build_incident_prompt(events_text, service_context, incident.scenario_type)
+    
+    # Fetch metrics around the incident time
+    metrics_data = await metrics_fetcher.get_incident_metrics(incident.created_at)
+    metrics_text = json.dumps(metrics_data, indent=2)
+    
+    user_prompt = build_incident_prompt(events_text, service_context, metrics_text, incident.scenario_type)
 
     response = await client.chat.completions.create(
         model=settings.GROQ_MODEL,

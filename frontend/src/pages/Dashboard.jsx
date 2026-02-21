@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
+import TelemetryGrid from '../components/TelemetryGrid';
 import {
     getIncidents,
     getStats,
@@ -24,6 +25,7 @@ function Dashboard() {
 
     const [incidents, setIncidents] = useState([]);
     const [stats, setStats] = useState(null);
+    const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [simulating, setSimulating] = useState(false);
     const [autoPilot, setAutoPilot] = useState(false);
@@ -31,14 +33,16 @@ function Dashboard() {
 
     const fetchData = useCallback(async () => {
         try {
-            const [inc, st, gov] = await Promise.all([
+            const [inc, st, gov, ev] = await Promise.all([
                 getIncidents(),
                 getStats(),
-                getGovernanceStatus()
+                getGovernanceStatus(),
+                fetch('/api/events').then(res => res.json())
             ]);
 
             setIncidents(inc || []);
             setStats(st);
+            setEvents((ev || []).slice(0, 15)); // Last 15 events
 
             if (gov) {
                 setAutoPilot(gov.auto_pilot);
@@ -112,11 +116,11 @@ function Dashboard() {
                 >
                     {governanceMode}
                 </div>
-
             </div>
 
-            {/* STATS */}
+            <TelemetryGrid />
 
+            {/* STATS */}
             <div className="stats-grid">
 
                 <div className="stat-card">
@@ -161,66 +165,69 @@ function Dashboard() {
 
             </div>
 
-            {/* INCIDENT TABLE */}
-
-            <div className="table-card">
-
-                <div className="table-head">
-                    <h3>INCIDENT_LOGS</h3>
-                    <span>{incidents.length}</span>
-                </div>
-
-                {incidents.length === 0 ? (
-
-                    <div className="empty">
-                        <Search size={48} />
-                        <h4>NO_INCIDENTS_DETECTED</h4>
+            <div className="dashboard-main-grid">
+                {/* INCIDENT TABLE */}
+                <div className="table-card incident-column">
+                    <div className="table-head">
+                        <h3>INCIDENT_LOGS</h3>
+                        <span>{incidents.length}</span>
                     </div>
 
-                ) : (
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>SEVERITY</th>
-                                <th>INCIDENT_IDENTIFIER</th>
-                                <th>STATUS</th>
-                                <th>AFFECTED_SERVICES</th>
-                                <th>TIMESTAMP</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            {incidents.map((inc) => (
-
-                                <tr key={inc.id} onClick={() => navigate(`/incidents/${inc.id}`)}>
-
-                                    <td><StatusBadge type="severity" value={inc.severity} /></td>
-
-                                    <td className="incident-title">{inc.title}</td>
-
-                                    <td><StatusBadge type="status" value={inc.status} /></td>
-
-                                    <td>
-                                        {inc.affected_services?.slice(0, 3).map(s =>
-                                            <span key={s} className="tag">{s}</span>
-                                        )}
-                                    </td>
-
-                                    <td className="time">{formatTime(inc.created_at)}</td>
-
+                    {incidents.length === 0 ? (
+                        <div className="empty">
+                            <Search size={48} />
+                            <h4>NO_INCIDENTS_DETECTED</h4>
+                        </div>
+                    ) : (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SEVERITY</th>
+                                    <th>IDENTIFIER</th>
+                                    <th>STATUS</th>
+                                    <th>AFFECTED</th>
+                                    <th>TIME</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {incidents.map((inc) => (
+                                    <tr key={inc.id} onClick={() => navigate(`/incidents/${inc.id}`)}>
+                                        <td><StatusBadge type="severity" value={inc.severity} /></td>
+                                        <td className="incident-title">{inc.title}</td>
+                                        <td><StatusBadge type="status" value={inc.status} /></td>
+                                        <td>
+                                            {inc.affected_services?.slice(0, 2).map(s =>
+                                                <span key={s} className="tag">{s}</span>
+                                            )}
+                                        </td>
+                                        <td className="time">{formatTime(inc.created_at)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
 
-                            ))}
-
-                        </tbody>
-
-                    </table>
-
-                )}
-
+                {/* LIVE EVENT FEED */}
+                <div className="table-card feed-column">
+                    <div className="table-head">
+                        <h3>LIVE_SENTINEL_FEED</h3>
+                        <div className="pulse-icon" />
+                    </div>
+                    <div className="event-stream">
+                        {events.length === 0 ? (
+                            <div className="empty-small">NO_LIVE_TRAFFIC</div>
+                        ) : (
+                            events.map((ev, idx) => (
+                                <div key={ev.id || idx} className={`event-row ${ev.severity?.toLowerCase()}`}>
+                                    <span className="ev-time">{formatTime(ev.timestamp)}</span>
+                                    <span className="ev-service">[{ev.source_service.toUpperCase()}]</span>
+                                    <span className="ev-msg">{ev.message}</span>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
             </div>
 
         </div>
